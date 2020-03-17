@@ -240,7 +240,7 @@ def write2html():
     html = '{}{}{}'.format(header, body, footer)
 
     # write to cve html file for showing results
-    file = 'cve-{}-{}.html'.format('daily', 'new')
+    file = 'cve-{}.html'.format(today)
     with open(file, 'w', encoding='utf-8') as fw:
         fw.write(html)
 
