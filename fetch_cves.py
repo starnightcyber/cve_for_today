@@ -86,18 +86,17 @@ def fill_with_nvd(cve, cve_obj):
             print(description)
             cve_obj.cve_description = description
 
-            severity = re.findall('"vuln-cvss3-panel-score">(.*)?</a>', content)
-            score, cve_level, _ = severity[0].split(' ')
+            soup = BeautifulSoup(content, "html.parser")
+            severity = soup.find('a', id="Cvss3NistCalculatorAnchor").get_text()
+            score, cve_level = severity.split(' ')
             cve_obj.cve_score = score
             cve_obj.cve_level = cve_level
             print(score, cve_level)
     except:
         print('v3 not scored, switch to v2...')
         try:
-            soup = BeautifulSoup(content, "html.parser")
-            score_level = soup.find('a',
-                 id="p_lt_WebPartZone1_zoneCenter_pageplaceholder_p_lt_WebPartZone1_zoneCenter_VulnerabilityDetail_VulnFormView_Cvss2CalculatorAnchor").get_text()
-            score, cve_level = score_level.split(' ')
+            severity = soup.find('a', id="Cvss2CalculatorAnchor").get_text()
+            score, cve_level = severity.split(' ')
             cve_obj.cve_score = score
             cve_obj.cve_level = cve_level
             print(score, cve_level)
